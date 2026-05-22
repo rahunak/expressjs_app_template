@@ -6,6 +6,10 @@ import { File } from '../entities/File';
 
 dotenv.config();
 
+const isCliContext = process.argv.some(arg =>
+  arg.includes('typeorm') || arg.includes('migration')
+);
+
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: process.env.DB_HOST || 'localhost',
@@ -13,10 +17,13 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'root',
   database: process.env.DB_NAME || 'express_app_db',
-  synchronize: process.env.NODE_ENV === 'development',
+  synchronize: false,
   logging: process.env.NODE_ENV === 'development',
   entities: [User, RefreshToken, File],
-  migrations: ['src/migrations/**/*.ts'],
+  migrations: isCliContext
+    ? ['src/migrations/**/*.ts']      // для CLI, создавать,мигрировать и т.д
+    : ['dist/migrations/**/*.js'],    // уже готовые к проду миграции
+  migrationsRun: !isCliContext,
   subscribers: [],
   charset: 'utf8mb4',
   poolSize: 5
