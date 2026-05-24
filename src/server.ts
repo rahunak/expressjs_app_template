@@ -9,8 +9,9 @@ import 'reflect-metadata';
 dotenv.config();
 
 import { connectDB } from './config/database';
+import authRoutes from './routes/authRoutes';
 
-
+import errorHandler from './middleware/errorHandler';
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
+app.use('/', authRoutes);
 
 
 app.use((_req: Request, res: Response) => {
@@ -56,7 +58,7 @@ app.use((_req: Request, res: Response) => {
   });
 });
 
-
+app.use(errorHandler);
 
 const PORT = parseInt(process.env.PORT || '3000');
 const HOST = process.env.HOST || '0.0.0.0';
