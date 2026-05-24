@@ -19,3 +19,24 @@ export interface TokenPair {
   refreshToken: string;
 }
 
+export interface FileAttributes {
+  id: number;
+  name: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  path: string;
+  userId: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface PaginationResult<T> {
+  files: T[];
+  pagination: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
+}

@@ -10,7 +10,7 @@ dotenv.config();
 
 import { connectDB } from './config/database';
 import authRoutes from './routes/authRoutes';
-
+import fileRoutes from './routes/fileRoutes';
 import errorHandler from './middleware/errorHandler';
 
 const app = express();
@@ -49,7 +49,7 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 app.use('/', authRoutes);
-
+app.use('/file', fileRoutes);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({
